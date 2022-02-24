@@ -3,7 +3,6 @@ import './style.css'
 
 import * as THREE from 'three';
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Water } from 'three/examples/jsm/objects/Water.js';
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -14,6 +13,9 @@ let camera, scene, renderer;
 let controls, water, sun;
 let aflag = 0, dflag = 0, wflag = 0, sflag = 0;
 let boatToCameraVector = new Vector3(0, 50, -90);
+let health = 100
+let score = 0
+let cameraflag = 0; // cameraflag is 0 for third person view and 1 for vird's eye view. ,, ., 
 
 const loader = new GLTFLoader();
 
@@ -30,24 +32,8 @@ class Boat {
       gltf.scene.rotation.y = Math.PI
 
       this.boat = gltf.scene
-      this.speed = {
-        vel: 0,
-        rot: 0
-      }
-    })
-  }
-
-  stop(){
-    this.speed.vel = 0
-    this.speed.rot = 0
-  }
-
-  update(){
-    if(this.boat){
-      this.boat.rotation.y += this.speed.rot
-      this.boat.translateZ(-1*this.speed.vel)
     }
-  }
+    )}
 }
 
 class Trash{
@@ -81,7 +67,7 @@ async function createTrash(){
 
 let trashes = []
 const TRASH_COUNT = 500
-
+let goneflag = []
 init();
 animate();
 
@@ -175,6 +161,7 @@ async function init() {
   for(let i = 0; i < TRASH_COUNT; i++){
     const trash = await createTrash()
     trashes.push(trash)
+    goneflag.push(0)
   }
 
   window.addEventListener( 'resize', onWindowResize );
@@ -210,6 +197,24 @@ async function init() {
       // camera.position.z = boat.boat.position.z + boatToCameraVector.z
       // camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
       aflag = 1
+    }
+    if(e.key == "j"){
+      if(cameraflag == 0){
+        cameraflag = 1;
+        camera.position.x = boat.boat.position.x
+        camera.position.y = boat.boat.position.y + 400
+        camera.position.z = boat.boat.position.z
+        camera.lookAt(boat.boat.position.x, boat.boat.position.y, boat.boat.position.z)
+      }
+      else{
+        cameraflag = 0;
+        camera.position.x = boat.boat.position.x + boatToCameraVector.x
+        camera.position.y = boat.boat.position.y + boatToCameraVector.y
+        camera.position.z = boat.boat.position.z + boatToCameraVector.z
+        camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+      }
+      // set camera directly above ship
+      
     }
     // camera.lookAt(boat.boat.position.x, boat.boat.position.y, boat.boat.position.z);
     // console.log(boat.boat.position)
@@ -248,22 +253,46 @@ function isColliding(obj1, obj2){
   )
 }
 
+// function checkCollisions(){
+//   if(boat.boat){
+//     trashes.forEach(trash => {
+//       // console.log("hello")
+//       if(trash.trash){
+//         if(isColliding(boat.boat, trash.trash)){
+//           scene.remove(trash.trash)
+          
+//           score++;
+//           updateHUD();
+//         }
+//       }
+//     })
+//   }
+// }
+
 function checkCollisions(){
   if(boat.boat){
-    trashes.forEach(trash => {
-      // console.log("hello")
-      if(trash.trash){
-        if(isColliding(boat.boat, trash.trash)){
-          scene.remove(trash.trash)
+    for(let i = 0; i < TRASH_COUNT; i++){
+      if(isColliding(boat.boat, trashes[i].trash)){
+        if(goneflag[i] == 0){
+          scene.remove(trashes[i].trash)
+          score++;
+          goneflag[i] = 1;
+          updateHUD();
         }
       }
-    })
+    }
   }
+}
+
+function updateHUD(){
+  document.getElementById("score").innerHTML = "Score: " + score;
+  document.getElementById("health").innerHTML = "Health: " + health;
 }
 
 function animate() {
   requestAnimationFrame( animate );
   render();
+  // updateHUD();
   // boat.update()
   // camera.lookAt(boat.position.x, boat.position.y, boat.position.z);
   if(wflag){
@@ -279,22 +308,26 @@ function animate() {
       boat.boat.rotation.y += -0.02
       boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
       boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
-      camera.position.x = boat.boat.position.x + boatToCameraVector.x
-      camera.position.y = boat.boat.position.y + boatToCameraVector.y
-      camera.position.z = boat.boat.position.z + boatToCameraVector.z
-      camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
-      console.log(boat.boat.position)
-      console.log(camera.position)
-      console.log(boat.boat.position.clone().add(boatToCameraVector.clone()))
+      if(cameraflag == 0){
+        camera.position.x = boat.boat.position.x + boatToCameraVector.x
+        camera.position.y = boat.boat.position.y + boatToCameraVector.y
+        camera.position.z = boat.boat.position.z + boatToCameraVector.z
+        camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+      }
+      // console.log(boat.boat.position)
+      // console.log(camera.position)
+      // console.log(boat.boat.position.clone().add(boatToCameraVector.clone()))
     }
     if(aflag){
       boat.boat.rotation.y += 0.02
       boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
       boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
-      camera.position.x = boat.boat.position.x + boatToCameraVector.x
-      camera.position.y = boat.boat.position.y + boatToCameraVector.y
-      camera.position.z = boat.boat.position.z + boatToCameraVector.z
-      camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+      if(cameraflag == 0){
+        camera.position.x = boat.boat.position.x + boatToCameraVector.x
+        camera.position.y = boat.boat.position.y + boatToCameraVector.y
+        camera.position.z = boat.boat.position.z + boatToCameraVector.z
+        camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+      }
     }
   checkCollisions()
 }

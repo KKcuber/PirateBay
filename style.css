@@ -1,4 +1,20 @@
-*{
-  margin: 0;
-  padding: 0;
+body { margin: 0; }
+canvas { width: 100%; height: 100% }
+
+#score {
+	position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display:block;
+}
+
+#health {
+	position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: left;
+	z-index: 100;
+	display:block;
 }
