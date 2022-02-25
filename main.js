@@ -10,7 +10,9 @@ import { Vector3 } from 'three';
 // import Boat from './boat.js'
 
 let camera, scene, renderer;
-let controls, water, sun;
+let water, sun;
+// let renderflag = 0;
+let counter = 0;
 let aflag = 0, dflag = 0, wflag = 0, sflag = 0;
 let boatToCameraVector = new Vector3(0, 50, -90);
 let health = 100
@@ -21,6 +23,17 @@ const loader = new GLTFLoader();
 
 function random(min, max) {
   return Math.random() * (max - min) + min;
+}
+
+function farRandom(min, max){
+  let ret = Math.random() * (max - min) + min;
+  if(ret < 50){
+    ret += 50
+  }
+  if(ret>-50){
+    ret -= 50
+  }
+  return ret
 }
 
 class Boat {
@@ -36,6 +49,20 @@ class Boat {
     )}
 }
 
+class EnemyBoat {
+  constructor(){
+    loader.load("assets/boat/scene.gltf", (gltf) => {
+      scene.add( gltf.scene )
+      gltf.scene.scale.set(3, 3, 3)
+      gltf.scene.position.set(farRandom(-200, 200),0,farRandom(-200, 200))
+      gltf.scene.rotation.y = Math.PI
+
+      this.enemyBoat = gltf.scene
+    }
+    )}
+}
+
+
 class Trash{
   constructor(_scene){
     scene.add( _scene )
@@ -47,7 +74,7 @@ class Trash{
 
 let boat = new Boat()
 let boatDirectonVector = new Vector3(0,0,1)
-
+let enemyBoat = new EnemyBoat()
 
 async function loadModel(url){
   return new Promise((resolve, reject) => {
@@ -157,6 +184,7 @@ async function init() {
   // controls.update();
 
   const waterUniforms = water.material.uniforms;
+  // let firstflag = 1;
 
   for(let i = 0; i < TRASH_COUNT; i++){
     const trash = await createTrash()
@@ -167,6 +195,7 @@ async function init() {
   window.addEventListener( 'resize', onWindowResize );
 
   window.addEventListener( 'keydown', function(e){
+    
     if(e.key == "w" && boat.boat){
       // boat.boat.position.add(boatDirectonVector.clone().multiplyScalar(3))
       // camera.position.add(boatDirectonVector.clone().multiplyScalar(3))
@@ -235,7 +264,7 @@ async function init() {
      aflag = 0
    }
   })
-}
+} 
 
 function onWindowResize() {
 
@@ -330,6 +359,40 @@ function animate() {
       }
     }
   checkCollisions()
+  // if(enemyBoat.enemyBoat){
+  //   // move enemy boat towards the boat
+  //   let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
+  //   enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.05))
+  //   // enemyBoat.enemyBoat.rotation.y += 0.02
+  //   // enemyBoatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+  //   // enemyBoatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+  //   // if(cameraflag == 0){
+  //   //   camera.position.x = enemyBoat.enemyBoat.position.x + enemyBoatToCameraVector.x
+  //   //   camera.position.y = enemyBoat.enemyBoat.position.y + enemyBoatToCameraVector.y
+  //   //   camera.position.z = enemyBoat.enemyBoat.position.z + enemyBoatToCameraVector.z
+  //   //   camera.lookAt(enemyBoat.enemyBoat.position.x + 50*enemyBoatDirectonVector.x, enemyBoat.enemyBoat.position.y + 50*enemyBoatDirectonVector.y, enemyBoat.enemyBoat.position.z + 50*enemyBoatDirectonVector.z)
+  //   // }
+  //   if(isColliding(enemyBoat.enemyBoat, boat.boat)){
+  //     health--;
+  //     updateHUD();
+  //   }
+  // }
+  // console.log("yooooooooo")
+  // Move enemy boat towards the boat if enemy boat and boat are rendered
+  if(counter > 300){
+    console.log(enemyBoat.enemyBoat.position)
+    let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
+    enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.005))
+    // make enemy boat looakt at the boat
+    enemyBoat.enemyBoat.lookAt(boat.boat.position)
+    if(isColliding(enemyBoat.enemyBoat, boat.boat)){
+      enemyBoat.enemyBoat.position.set(farRandom(boat.boat.position.x-200, boat.boat.position.x+200),0,farRandom(boat.boat.position.z-200, boat.boat.position.z+200))
+      health -= 10;
+      updateHUD();
+    }
+    
+    }
+  counter++
 }
 
 function render() {
