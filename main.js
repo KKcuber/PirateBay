@@ -110,6 +110,8 @@ async function createTrash(){
 let trashes = []
 let cannonballs = []
 let cannonballsDirectionVectors = []
+let enemycannonballs = []
+let enemycannonballsDirectionVectors = []
 const TRASH_COUNT = 500
 let goneflag = []
 init();
@@ -352,9 +354,28 @@ function checkCollisions(){
       if(cannonballs[i].cannonball){
         if(isColliding(cannonballs[i].cannonball, enemyBoat.enemyBoat)){
           scene.remove(cannonballs[i].cannonball)
+          cannonballs.splice(i, 1)
+          cannonballsDirectionVectors.splice(i, 1)
           enemyBoat.enemyBoat.position.set(farRandom(boat.boat.position.x-300, boat.boat.position.x+300),0,farRandom(boat.boat.position.z-300, boat.boat.position.z+300))
           score += 10;
           updateHUD();
+        }
+      }
+    }
+  }
+  // decrease health by 20 if enemy cannonball hits player boat
+  if(boat.boat && enemyBoat.enemyBoat){
+    if(enemycannonballs)
+    {
+      for(let i = 0; i < enemycannonballs.length; i++){
+        if(enemycannonballs[i].cannonball){
+          if(isColliding(enemycannonballs[i].cannonball, boat.boat)){
+            scene.remove(enemycannonballs[i].cannonball)
+            enemycannonballs.splice(i,1)
+            enemycannonballsDirectionVectors.splice(i,1)
+            health -= 20;
+            updateHUD();
+          }
         }
       }
     }
@@ -366,86 +387,109 @@ function updateHUD(){
   document.getElementById("health").innerHTML = "Health: " + health;
 }
 
+setInterval(function () {
+  // shoot cannonballs from enemy boat towards the player every 5 sesconds
+  if(enemyBoat.enemyBoat){
+    console.log("shot")
+    const cannonball = new CannonBall(enemyBoat.enemyBoat.position.x, enemyBoat.enemyBoat.position.y+10, enemyBoat.enemyBoat.position.z)
+    enemycannonballs.push(cannonball)
+    const tempVector = new THREE.Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
+    enemycannonballsDirectionVectors.push(tempVector.clone().normalize())
+    console.log(enemycannonballs.length)
+  }
+}, 5000);
+
 function animate() {
   requestAnimationFrame( animate );
   render();
   // updateHUD();
   // boat.update()
   // camera.lookAt(boat.position.x, boat.position.y, boat.position.z);
-  if(wflag){
-      boat.boat.position.add(boatDirectonVector.clone().multiplyScalar(3))
-      camera.position.add(boatDirectonVector.clone().multiplyScalar(3))
-    }
-    if(sflag){
-      boat.boat.position.add(boatDirectonVector.clone().multiplyScalar(-3))
-      camera.position.add(boatDirectonVector.clone().multiplyScalar(-3))
-    }
-    if(dflag){
-      // rotate the boat such that camera is looking at the boat always
-      boat.boat.rotation.y += -0.02
-      boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
-      boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
-      if(cameraflag == 0){
-        camera.position.x = boat.boat.position.x + boatToCameraVector.x
-        camera.position.y = boat.boat.position.y + boatToCameraVector.y
-        camera.position.z = boat.boat.position.z + boatToCameraVector.z
-        camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+  if(health > 0){
+    if(wflag){
+        boat.boat.position.add(boatDirectonVector.clone().multiplyScalar(3))
+        camera.position.add(boatDirectonVector.clone().multiplyScalar(3))
       }
-      // console.log(boat.boat.position)
-      // console.log(camera.position)
-      // console.log(boat.boat.position.clone().add(boatToCameraVector.clone()))
-    }
-    if(aflag){
-      boat.boat.rotation.y += 0.02
-      boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
-      boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
-      if(cameraflag == 0){
-        camera.position.x = boat.boat.position.x + boatToCameraVector.x
-        camera.position.y = boat.boat.position.y + boatToCameraVector.y
-        camera.position.z = boat.boat.position.z + boatToCameraVector.z
-        camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+      if(sflag){
+        boat.boat.position.add(boatDirectonVector.clone().multiplyScalar(-3))
+        camera.position.add(boatDirectonVector.clone().multiplyScalar(-3))
+      }
+      if(dflag){
+        // rotate the boat such that camera is looking at the boat always
+        boat.boat.rotation.y += -0.02
+        boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
+        boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), -0.02)
+        if(cameraflag == 0){
+          camera.position.x = boat.boat.position.x + boatToCameraVector.x
+          camera.position.y = boat.boat.position.y + boatToCameraVector.y
+          camera.position.z = boat.boat.position.z + boatToCameraVector.z
+          camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+        }
+        // console.log(boat.boat.position)
+        // console.log(camera.position)
+        // console.log(boat.boat.position.clone().add(boatToCameraVector.clone()))
+      }
+      if(aflag){
+        boat.boat.rotation.y += 0.02
+        boatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+        boatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+        if(cameraflag == 0){
+          camera.position.x = boat.boat.position.x + boatToCameraVector.x
+          camera.position.y = boat.boat.position.y + boatToCameraVector.y
+          camera.position.z = boat.boat.position.z + boatToCameraVector.z
+          camera.lookAt(boat.boat.position.x + 50*boatDirectonVector.x, boat.boat.position.y + 50*boatDirectonVector.y, boat.boat.position.z + 50*boatDirectonVector.z)
+        }
+      }
+    checkCollisions()
+    for(let i = 0; i < cannonballs.length; i++){
+      if(cannonballs[i].cannonball){
+        cannonballs[i].cannonball.position.add(cannonballsDirectionVectors[i].clone().multiplyScalar(5))
       }
     }
-  checkCollisions()
-  for(let i = 0; i < cannonballs.length; i++){
-    if(cannonballs[i].cannonball){
-      cannonballs[i].cannonball.position.add(cannonballsDirectionVectors[i].clone().multiplyScalar(5))
+    for(let i = 0; i < enemycannonballs.length; i++){
+      if(enemycannonballs[i].cannonball){
+        enemycannonballs[i].cannonball.position.add(enemycannonballsDirectionVectors[i].clone().multiplyScalar(5))
+      }
     }
+    // if(enemyBoat.enemyBoat){
+    //   // move enemy boat towards the boat
+    //   let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
+    //   enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.05))
+    //   // enemyBoat.enemyBoat.rotation.y += 0.02
+    //   // enemyBoatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+    //   // enemyBoatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
+    //   // if(cameraflag == 0){
+    //   //   camera.position.x = enemyBoat.enemyBoat.position.x + enemyBoatToCameraVector.x
+    //   //   camera.position.y = enemyBoat.enemyBoat.position.y + enemyBoatToCameraVector.y
+    //   //   camera.position.z = enemyBoat.enemyBoat.position.z + enemyBoatToCameraVector.z
+    //   //   camera.lookAt(enemyBoat.enemyBoat.position.x + 50*enemyBoatDirectonVector.x, enemyBoat.enemyBoat.position.y + 50*enemyBoatDirectonVector.y, enemyBoat.enemyBoat.position.z + 50*enemyBoatDirectonVector.z)
+    //   // }
+    //   if(isColliding(enemyBoat.enemyBoat, boat.boat)){
+    //     health--;
+    //     updateHUD();
+    //   }
+    // }
+    // console.log("yooooooooo")
+    // Move enemy boat towards the boat if enemy boat and boat are rendered
+    if(counter > 300){
+      // console.log(enemyBoat.enemyBoat.position)
+      let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
+      enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.005))
+      // make enemy boat looakt at the boat
+      enemyBoat.enemyBoat.lookAt(boat.boat.position)
+      if(boatColliding(enemyBoat.enemyBoat, boat.boat)){
+        enemyBoat.enemyBoat.position.set(farRandom(boat.boat.position.x-300, boat.boat.position.x+300),0,farRandom(boat.boat.position.z-300, boat.boat.position.z+300))
+        health -= 10;
+        updateHUD();
+      }
+    }
+    counter++
   }
-  // if(enemyBoat.enemyBoat){
-  //   // move enemy boat towards the boat
-  //   let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
-  //   enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.05))
-  //   // enemyBoat.enemyBoat.rotation.y += 0.02
-  //   // enemyBoatDirectonVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
-  //   // enemyBoatToCameraVector.applyAxisAngle(new Vector3(0,1,0), 0.02)
-  //   // if(cameraflag == 0){
-  //   //   camera.position.x = enemyBoat.enemyBoat.position.x + enemyBoatToCameraVector.x
-  //   //   camera.position.y = enemyBoat.enemyBoat.position.y + enemyBoatToCameraVector.y
-  //   //   camera.position.z = enemyBoat.enemyBoat.position.z + enemyBoatToCameraVector.z
-  //   //   camera.lookAt(enemyBoat.enemyBoat.position.x + 50*enemyBoatDirectonVector.x, enemyBoat.enemyBoat.position.y + 50*enemyBoatDirectonVector.y, enemyBoat.enemyBoat.position.z + 50*enemyBoatDirectonVector.z)
-  //   // }
-  //   if(isColliding(enemyBoat.enemyBoat, boat.boat)){
-  //     health--;
-  //     updateHUD();
-  //   }
-  // }
-  // console.log("yooooooooo")
-  // Move enemy boat towards the boat if enemy boat and boat are rendered
-  if(counter > 300){
-    // console.log(enemyBoat.enemyBoat.position)
-    let enemyBoatToBoatVector = new Vector3(boat.boat.position.x - enemyBoat.enemyBoat.position.x, boat.boat.position.y - enemyBoat.enemyBoat.position.y, boat.boat.position.z - enemyBoat.enemyBoat.position.z)
-    enemyBoat.enemyBoat.position.add(enemyBoatToBoatVector.clone().multiplyScalar(0.005))
-    // make enemy boat looakt at the boat
-    enemyBoat.enemyBoat.lookAt(boat.boat.position)
-    if(boatColliding(enemyBoat.enemyBoat, boat.boat)){
-      enemyBoat.enemyBoat.position.set(farRandom(boat.boat.position.x-300, boat.boat.position.x+300),0,farRandom(boat.boat.position.z-300, boat.boat.position.z+300))
-      health -= 10;
-      updateHUD();
-    }
-    
-    }
-  counter++
+  // display that game has ended
+  if(health<=0)
+  {
+    document.getElementById("game-over").innerHTML = "Game Over :( ";
+  }
 }
 
 function render() {
