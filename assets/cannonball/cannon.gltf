@@ -1,0 +1,381 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "extensionsUsed" : [
+        "KHR_materials_unlit"
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                5
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Object_2"
+        },
+        {
+            "mesh" : 1,
+            "name" : "Object_3"
+        },
+        {
+            "mesh" : 2,
+            "name" : "Object_4"
+        },
+        {
+            "mesh" : 3,
+            "name" : "Object_5"
+        },
+        {
+            "children" : [
+                0,
+                1,
+                2,
+                3
+            ],
+            "name" : "Santa Margarita Iron Shot OBJ.obj.cleaner.materialmerger.gles"
+        },
+        {
+            "children" : [
+                4
+            ],
+            "name" : "Sketchfab_model",
+            "rotation" : [
+                0.6534556150436401,
+                -0.27017730474472046,
+                0.6734407544136047,
+                0.21558645367622375
+            ],
+            "translation" : [
+                4.479988098144531,
+                5.867764949798584,
+                4.470010757446289
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "extensions" : {
+                "KHR_materials_unlit" : {}
+            },
+            "name" : "Santa_Margarita_Iron_Shot_OBJ",
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.9
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Object_0",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Object_1",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 4,
+                        "NORMAL" : 5,
+                        "TEXCOORD_0" : 6
+                    },
+                    "indices" : 7,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Object_2",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 8,
+                        "NORMAL" : 9,
+                        "TEXCOORD_0" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 0
+                }
+            ]
+        },
+        {
+            "name" : "Object_3",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 12,
+                        "NORMAL" : 13,
+                        "TEXCOORD_0" : 14
+                    },
+                    "indices" : 15,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "Santa_Margarita_Iron_Shot_OBJ_baseColor",
+            "uri" : "Santa_Margarita_Iron_Shot_OBJ_baseColor.jpg"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 65787,
+            "max" : [
+                -2.851548910140991,
+                8.519709587097168,
+                1.3891819715499878
+            ],
+            "min" : [
+                -4.901287078857422,
+                6.639051914215088,
+                -0.7103480100631714
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 65787,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 65787,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5125,
+            "count" : 354483,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 65815,
+            "max" : [
+                -2.854062080383301,
+                8.717266082763672,
+                1.388414978981018
+            ],
+            "min" : [
+                -4.9330058097839355,
+                6.6557111740112305,
+                -0.7099660038948059
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 65815,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 65815,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 7,
+            "componentType" : 5125,
+            "count" : 345312,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 66116,
+            "max" : [
+                -2.8517110347747803,
+                8.717266082763672,
+                1.3891819715499878
+            ],
+            "min" : [
+                -4.9330058097839355,
+                6.638743877410889,
+                -0.7098429799079895
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 66116,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5126,
+            "count" : 66116,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5125,
+            "count" : 270903,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 12,
+            "componentType" : 5126,
+            "count" : 1089,
+            "max" : [
+                -2.864293098449707,
+                7.639021873474121,
+                1.3837480545043945
+            ],
+            "min" : [
+                -3.9982450008392334,
+                7.209864139556885,
+                0.43087899684906006
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 13,
+            "componentType" : 5126,
+            "count" : 1089,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 14,
+            "componentType" : 5126,
+            "count" : 1089,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 15,
+            "componentType" : 5123,
+            "count" : 2370,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 789444,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 789444,
+            "byteOffset" : 789444
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 526296,
+            "byteOffset" : 1578888
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1417932,
+            "byteOffset" : 2105184
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 789780,
+            "byteOffset" : 3523116
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 789780,
+            "byteOffset" : 4312896
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 526520,
+            "byteOffset" : 5102676
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1381248,
+            "byteOffset" : 5629196
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 793392,
+            "byteOffset" : 7010444
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 793392,
+            "byteOffset" : 7803836
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 528928,
+            "byteOffset" : 8597228
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 1083612,
+            "byteOffset" : 9126156
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 13068,
+            "byteOffset" : 10209768
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 13068,
+            "byteOffset" : 10222836
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 8712,
+            "byteOffset" : 10235904
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4740,
+            "byteOffset" : 10244616
+        }
+    ],
+    "samplers" : [
+        {
+            "magFilter" : 9729,
+            "minFilter" : 9987
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 10249356,
+            "uri" : "cannon.bin"
+        }
+    ]
+}

@@ -1,0 +1,121 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.7.33",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "cannonBall",
+            "translation" : [
+                -0.0030795633792877197,
+                0.006493896245956421,
+                0.005619704723358154
+            ]
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "iron",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.3764705955982208,
+                    0.3764705955982208,
+                    0.3764705955982208,
+                    1
+                ],
+                "metallicFactor" : 0.25,
+                "roughnessFactor" : 0.8500000238418579
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "cannonBall",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TEXCOORD_0" : 2
+                    },
+                    "indices" : 3,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 1296,
+            "max" : [
+                0.07000000029802322,
+                0.07000000029802322,
+                0.07000000029802322
+            ],
+            "min" : [
+                -0.07000000029802322,
+                -0.07000000029802322,
+                -0.07000000029802322
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 1296,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 1296,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5123,
+            "count" : 1872,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 15552,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 15552,
+            "byteOffset" : 15552
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10368,
+            "byteOffset" : 31104
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3744,
+            "byteOffset" : 41472
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 45216,
+            "uri" : "untitled.bin"
+        }
+    ]
+}
